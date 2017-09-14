@@ -22,7 +22,8 @@ int main(int argc, char** argv) {
     //Variables
     const int MAX=36;
     int x, choice;
-    char *array[MAX];    //Character array to print number
+    char array[MAX];    //Character array to print number
+    char *ptr=array;    //Pointer to array
     
     //Initialize array
     for(int i=0;i<10;i++){
@@ -46,7 +47,6 @@ int main(int argc, char** argv) {
     printf("Your choice is: %i \n", choice);
     //Process Data
     if(choice==1){
-        printf("%c\n",array[11]);
         base2(x,array);
     }
     else if(choice==2)
@@ -58,11 +58,10 @@ int main(int argc, char** argv) {
 }
 
 void base2(int x,char* array){
-    char *string[100];
+    char string[100];
     int size=0;
     for(int j=0;j<1;size++){
-        printf("%c",array[11]);
-        string[j]=array[x%2];
+        string[size]=array[x%2];
         x/=2;
         if(x==0)
             j=1;
@@ -73,5 +72,16 @@ void base2(int x,char* array){
     }
 }
 void base16(int x,char* array){
-    
+    char string[100];
+    int size=0;
+    for(int j=0;j<1;size++){
+        string[size]=array[x%16];
+        x/=16;
+        if(x==0)
+            j=1;
+    }
+    while(size>=0){
+        printf("%c",string[size]);
+        size--;
+    }
 }

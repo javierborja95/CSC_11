@@ -56,11 +56,11 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/test.exe
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/baseconverterv2.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/test.exe: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/baseconverterv2.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/test ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/baseconverterv2 ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}
@@ -73,7 +73,7 @@ ${OBJECTDIR}/main.o: main.c
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/test.exe
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/baseconverterv2.exe
 
 # Subprojects
 .clean-subprojects:

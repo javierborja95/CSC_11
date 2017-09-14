@@ -13,25 +13,27 @@
 //Global Constants
 
 //Function Prototypes
-void function(char*);
+//void function(char*);
 //Execution
 
 int main(int argc, char** argv) {
     //Variables
-    char *string[5];
+    char array[5];
     //Input Data
 
-    string[0]='a';
+    array[0]='A';
+    array[3]='F';
+    char *ptr=array;
     
     //Process Data
     
     //Output Data
-    printf("%*c\n",string[0]);
-    function(string);
+    printf("%c \n",*(ptr+1));
+    //function(string);
     
     return 0;
 }
 
-void function(char* string){
-    printf("%*c\n",string[0]);
-}
+//void function(char* string){
+//    printf("%*c\n",string[0]);
+//}
