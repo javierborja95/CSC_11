@@ -1,10 +1,10 @@
 .text
 .global main
 .rodata
-prompt: 	   .asciz "Enter a positive integer: "
+prompt: 	   .asciz "Enter a positive value for N: : "
 outputIntSums: .asciz "The sum of all the integers from 1 to %d is: %d\n"
-outputSqrSums: .asciz "The sum of all the squares from 1 to %d is: %d\n"
-errorMsg:      .asciz "Error: Input must be an integer greater than 0\n"
+outputSqrSums: .asciz "The sum of all the squares  from 1 to %d is: %d\n"
+errorMsg:      .asciz "Invalid value for N, must be positive!\n"
 specifier:     .asciz "%d"
 .data
 //count: .word 0
@@ -34,13 +34,26 @@ while_CountLtInput
 	cmp r6, r1          //Compare counter and input
 	bge output          //if(counter>=input) branch to output
 	add r6, #1          //counter++
-	
+	sum r4, r4, r6      //intSum=intSum + counter
+	mul r7, r6, r6      //r7=square of the counter
+	sum r5, r5, r7      //sqrSum=sqrSum + square of counter
 	bal while_CountLtInput //Always branch to beginning of loop
 	
 	//Output Data
 output:
+	ldr r0, = outputIntSums //Load output message
+						//r1 already contains input
+	mov r2, r4          //Move integer sum to r2 
+	bl scanf            //Call scanf
+	ldr r0, = outputSqrSums //Load output message
+	ldr r1, = input     //r1 points to input
+	ldr r1, [r1]        //r1 has value of input
+	mov r2, r5          //Move square of sums to r2
+	bl scanf            //Call scanf
+	bal end             //Branch to end of program
 error:
 	ldr r0, = errorMsg  //Load error message
 	bl scanf            //Call to scanf
+
 end:
 	pop {pc}
