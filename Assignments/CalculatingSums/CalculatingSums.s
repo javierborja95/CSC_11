@@ -1,7 +1,7 @@
 .text
 .global main
 .rodata
-prompt: 	   .asciz "Enter a positive value for N: : "
+prompt:        .asciz "Enter a positive value for N: : "
 outputIntSums: .asciz "The sum of all the integers from 1 to %d is: %d\n"
 outputSqrSums: .asciz "The sum of all the squares  from 1 to %d is: %d\n"
 errorMsg:      .asciz "Invalid value for N, must be positive!\n"
@@ -16,14 +16,14 @@ main:
 	push {lr}
 	
 	//Input Data
-	ldr r0, = prompt	//Load instruction
+	ldr r0, = prompt    //Load instruction
 	bl printf           //Display instruction
 	ldr r0, = spec1	    //Load single format specifier
 	ldr r1, = input     //r1 points to input
 	bl scanf            //Call to scanf
 	ldr r1, = input     //r1 points to input
 	ldr r1, [r1]        //r1 contains the value of input
-	cmp r1, #0			//Compare input to zero
+	cmp r1, #0          //Compare input to zero
 	ble error           //If(input <= 0) branch to error
 	ldr r4, #0          //r4 will be the integer sum
 	ldr r5, #0          //r5 will be the sqr sum
@@ -42,7 +42,7 @@ while_CountLtInput
 	//Output Data
 output:
 	ldr r0, = outputIntSums //Load output message
-						//r1 already contains input
+	                    //r1 already contains input
 	mov r2, r4          //Move integer sum to r2 
 	bl scanf            //Call scanf
 	ldr r0, = outputSqrSums //Load output message
