@@ -31,8 +31,6 @@ main:
 	
 	//Process Data
 while_CountLtInput:
-	//`ldr r1, = input     //r1 points to input
-	//ldr r1, [r1]        //r1 has value of input
 	cmp r6, r1          //Compare counter and input
 	bge output          //if(counter>=input) branch to output
 	add r6, r6, #1      //counter++
