@@ -6,7 +6,6 @@ outputIntSums: .asciz "The sum of all the integers from 1 to %d is: %d\n"
 outputSqrSums: .asciz "The sum of all the squares  from 1 to %d is: %d\n"
 errorMsg:      .asciz "Invalid value for N, must be positive!\n"
 specifier:     .asciz "%d"
-test: .asciz "test"
 
 .data
 input: .word 0
