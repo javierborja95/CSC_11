@@ -23,10 +23,10 @@
 .equ SHORT, 500
 .equ LONG, 1000
 
-.equ G_TONE, 165
-.equ R_TONE, 440
-.equ Y_TONE, 277
-.equ B_TONE, 330
+.equ G_TONE, 660 //Elow
+.equ R_TONE, 880 //A
+.equ Y_TONE, 1109 //C#
+.equ B_TONE, 1319 //Ehigh
 
 .global main
 .text
@@ -61,10 +61,11 @@ main:
 	mov r1, #INPUT
 	bl pinMode
 
+	bl menu 		//Display menu
+
 loop:
 	ldr r0, =#LONG		//Delay for 1s
 	bl delay
-	bl menu 		//Display menu
 	mov r0, #GREEN_IN
 	mov r1, #RED_IN
 	mov r2, #YELLOW_IN
@@ -76,20 +77,34 @@ loop:
 
 	cmp r4, #GREEN
 	bne play_false		//if(!green) branch to play_false
+	ldr r0, =array		//r0 points to array
+	mov r1, #32		//r1=maxTurns
+	bl play			//Play game
 	bal loop		//loop again
 play_false:
 	cmp r4, #RED
 	bne setArr_false	//if(!red) branch to setArr_false
+	ldr r0, =array		//r0 points to array
+	mov r1, #32		//r1= arraySize
+	bl setArr		//Create new array
 	bal loop		//loop again
 setArr_false:
 	cmp r4, #YELLOW
-	beq loop		//if(yellow) loop again
-	bal exit		//if(blue) exit
-
-exit:
+	bne getArr_false	//if(!yellow) exit
+	ldr r0, =#LONG		//Delay for 1s
+	bl delay
+	ldr r0, =array		//r0 points to array
+	mov r1, #32		//r1=maxTurns
+	bl getArr		//display solution array
+	bal loop
+getArr_false:
 
 	mov r0, #0
 	pop {pc}
 
 .data
 msg: .asciz "game start\n"
+
+.section .bss
+.balign 4
+array: .skip 128 	//array[size] size=32, 32*4bytes=128 bytes

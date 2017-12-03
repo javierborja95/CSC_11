@@ -3,10 +3,10 @@
 .equ OUTPUT, 1
 .equ PIN, 2
 
-.equ GREEN, 165
-.equ RED, 440
-.equ YELLOW, 277
-.equ BLUE, 330
+.equ GREEN, 300
+.equ RED, 1600
+.equ YELLOW, 800
+.equ BLUE, 1000
 
 .global main
 .text
@@ -18,36 +18,43 @@ main:
 	bl softToneCreate
 
 	mov r0, #PIN
-	ldr r1, =#GREEN
+	ldr r1, =#1000
 	bl softToneWrite
 
-	ldr r0, =#1000	//Delay for 1s
+	ldr r0, =#200	//Delay for 1s
 	bl delay
 
 	mov r0, #PIN
-	ldr r1, =#RED
+	ldr r1, =#0
 	bl softToneWrite
 
-	ldr r0, =#1000	//Delay for 1s
+	ldr r0, =#200	//Delay for 1s
 	bl delay
 
 	mov r0, #PIN
-	ldr r1, =#YELLOW
+	ldr r1, =#800
 	bl softToneWrite
 
-	ldr r0, =#1000	//Delay for 1s
+	ldr r0, =#200	//Delay for 1s
 	bl delay
 
 	mov r0, #PIN
-	ldr r1, =#BLUE
+	ldr r1, =#0
 	bl softToneWrite
 
-	ldr r0, =#1000	//Delay for 1s
+	ldr r0, =#200	//Delay for 1s
 	bl delay
 
 	mov r0, #PIN
-	mov r1, #0
+	ldr r1, =#300
+	bl softToneWrite
+
+	ldr r0, =#1600	//Delay for 3s
+	bl delay
+
+	mov r0, #PIN
+	ldr r1, =#0
 	bl softToneWrite
 
 	mov r0, #0
-	//pop {pc}
+	pop {pc}
