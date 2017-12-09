@@ -1,0 +1,23 @@
+Thanks to professor Conrad for letting me use his Div_mod function. All the code is mine except
+for that usefull function.
+
+If you decide to follow the Frizing diagram, compiling instructions:
+	gcc -lwiringPi -lpthread -o simon main.s functions.s div_mod.s
+	./simon
+
+Lpthread is for the wiring pi softToneCreate() function.
+
+The only monitor output is a quick menu.
+FIRST, you must press red to set a combination, this takes about five seconds.
+
+Then you can press Green to play.
+After you hear the start tone, wait a second for the first color to popup. Then follow
+the color pattern. There are 32 max turns.
+
+You lose when you mispress a color.
+After you hear the lose tone you'll be back in the menu.
+
+Press green to play again, or you can press red to reset the combination.
+If you wish to cheat, press yellow to see/hear the pattern.
+
+Blue exits the program.

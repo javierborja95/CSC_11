@@ -27,7 +27,7 @@
 .global compare		//int compare(*array, turn, *pin);
 .global sounds		//void sounds(int,buzzer pin);
 .global getRand		//int(*seed);
-//All parameters are integers
+//All parameters are integers or pointers to integer arrays
 /////////////////////////////////////////////////////////////////
 /* 	setPins
 	purpose- Sets pins
@@ -476,8 +476,8 @@ compare_done:
 .endfunc
 /////////////////////////////////////////////////////////////////
 /* 	getRand
-	purpose- semi-random number generator, for multiple random numbers,
-			use delay()
+	purpose- semi-random number generator,
+	for multiple random numbers, use delay() between function calls
 	parameter- x
 	input-     x
 	output-    x
@@ -487,9 +487,9 @@ compare_done:
 getRand:
 	push {lr}
 	
-	bl clock
+	bl clock	//r0=system clock
 	mov r1, #53
-	mul r0, r1
+	mul r0, r1	//r0*=53
 	
 	pop {pc}
 .endfunc
