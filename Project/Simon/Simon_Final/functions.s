@@ -80,8 +80,8 @@ setPins:
 	bl pinMode
 
 	mov r2, #7
-	ldr r0, [sp, #8]
-	str r0, [r4, r2, LSL #2]
+	ldr r0, [sp, #8]	//Buzzer
+	str r0, [r4, r2, LSL #2]//Store buzzer in array
 	bl softToneCreate
 
 	pop {r4, pc}

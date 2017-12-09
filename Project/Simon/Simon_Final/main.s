@@ -1,8 +1,3 @@
-.equ LOW, 0
-.equ HIGH, 1
-.equ INPUT, 0
-.equ OUTPUT, 1
-
 .equ GREEN_IN, 26
 .equ RED_IN, 27
 .equ YELLOW_IN, 28
@@ -22,7 +17,6 @@
 
 .equ SHORT, 500
 .equ LONG, 1000
-
 
 .global main
 .text
@@ -86,7 +80,7 @@ setArr_false:
 	bal loop
 getArr_false:
 
-	mov r0, #0
+	mov r0, #0		//Exit
 	pop {pc}
 
 .data
