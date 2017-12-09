@@ -1,7 +1,7 @@
-.equ GREEN_IN, 6
-.equ RED_IN, 10
-.equ YELLOW_IN, 11
-.equ BLUE_IN, 31
+.equ GREEN_IN, 26
+.equ RED_IN, 27
+.equ YELLOW_IN, 28
+.equ BLUE_IN, 29
 
 .equ LOW, 0
 .equ HIGH, 1

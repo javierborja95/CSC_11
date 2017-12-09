@@ -3,10 +3,10 @@
 .equ INPUT, 0
 .equ OUTPUT, 1
 
-.equ GREEN_IN, 6
-.equ RED_IN, 10
-.equ YELLOW_IN, 11
-.equ BLUE_IN, 31
+.equ GREEN_IN, 26
+.equ RED_IN, 27
+.equ YELLOW_IN, 28
+.equ BLUE_IN, 29
 
 .equ GREEN_OUT, 24
 .equ RED_OUT, 22
@@ -29,15 +29,57 @@
 .equ Y_TONE, 1109 //C#
 .equ B_TONE, 1319 //Ehigh
 
+.global setPins		//void setPins(*pins,pin#s in stack)
 .global menu		//void menu();
 .global getInput	//int getInput(pin1,pin2,pin3,pin4);
 .global buzz		//void buzz(color,time);
 .global setArr		//void setArr(*array,arraySize);
-.global getArr		//void getArr(*array,maxTurns)
-.global play		//void play(*array, maxTurns)
-.global compare		//int compare(*array, turn)
+.global getArr		//void getArr(*array,maxTurns);
+.global play		//void play(*array, maxTurns);
+.global compare		//int compare(*array, turn);
+.global sounds		//void sounds(int);
+.global getRand		//int(*seed);
 //All parameters are integers
+/////////////////////////////////////////////////////////////////
+/* 	setPins
+	purpose- Sets pins
+	parameter- pointer to pin array, in stack: input, output, buzzer pins
+	input-     x
+	output-    x
+	return-    x
+*/
+setPins:
+	push {r4, lr}
+	mov r4, r0	//r4=pointer to array
+	bl wiringPiSetup	//Setting pins
 
+	mov r0, #GREEN_IN
+	mov r1, #INPUT
+	bl pinMode
+	mov r0, #RED_IN
+	mov r1, #INPUT
+	bl pinMode
+	mov r0, #YELLOW_IN
+	mov r1, #INPUT
+	bl pinMode
+	mov r0, #BLUE_IN
+	mov r1, #INPUT
+	bl pinMode
+
+	mov r0, #GREEN_OUT
+	mov r1, #OUTPUT
+	bl pinMode
+	mov r0, #RED_OUT
+	mov r1, #OUTPUT
+	bl pinMode
+	mov r0, #BLUE_OUT
+	mov r1, #OUTPUT
+	bl pinMode
+
+	mov r0, #BUZZER
+	bl softToneCreate
+
+	pop {r4, pc}
 /////////////////////////////////////////////////////////////////
 /* 	getInput
 	purpose- detects input
@@ -191,10 +233,14 @@ setArr:
 	mov r6, r1	//...i<arrSize;...
 	mov r7, r3	//r7= pointer to seed
 init_loop:
+	mov r0, #130
+	bl delay
 	cmp r5, r6
 	bge init_done	//branch if greater than or equal
 	//bl rand
-	mov r0, r5
+	bl clock
+	mov r1, #53
+	mul r0, r1
 	mov r1, #4
 	bl div_mod	//r0=i%4
 	str r0, [r4,+r5, LSL #2] //store i%4 into array[0+(r4<<2)]
@@ -218,6 +264,8 @@ getArr:
 	mov r6, r0		//r6=pointer to array
 	mov r5, r1		//r5=# of indexes to display
 getArr_loop:
+	mov r0, #50
+	bl delay
 	cmp r4, r5		//...i<maxTurns;...
 	bge getArr_done		//branch if(i>=maxTurns)
 	ldr r0, [r6,+r4, LSL #2]//r0=&array[0+(i*4)]
@@ -244,6 +292,8 @@ play:
 	mov r5, #1		//for(int i=1;...
 	mov r6, r1		//r6=maxTurns
 
+	mov r0, #0
+	bl sounds
 	ldr r0, =#LONG		//Delay for 1s
 	bl delay
 play_loop:
@@ -262,37 +312,86 @@ play_loop:
 	add r5, #1		//...i++)
 	bal play_loop
 lose:
-	mov r0, #BUZZER
-	ldr r1, =#1000
-	bl softToneWrite
-	ldr r0, =#200	//Delay for .2s
-	bl delay
-	mov r0, #BUZZER
-	ldr r1, =#0
-	bl softToneWrite
-	ldr r0, =#200	//Delay for .2s
-	bl delay
-	mov r0, #BUZZER
-	ldr r1, =#800
-	bl softToneWrite
-	ldr r0, =#200	//Delay for .2s
-	bl delay
-	mov r0, #BUZZER
-	ldr r1, =#0
-	bl softToneWrite
-	ldr r0, =#200	//Delay for .2s
-	bl delay
-	mov r0, #BUZZER
-	ldr r1, =#300
-	bl softToneWrite
-	ldr r0, =#1600	//Delay for 3s
-	bl delay
-	mov r0, #BUZZER
-	ldr r1, =#0
-	bl softToneWrite
+	mov r0, #1		//1=losing sound
+	bl sounds
 win:
 play_exit:
 	pop {r4, r5, r6, r7, pc}
+
+/////////////////////////////////////////////////////////////////
+/* 	sounds
+	purpose- Plays sounds for game
+	parameter- 0 for game start, 1 for game lose
+	input-     x
+	output-    a game start sound, or game lose sound
+	return-    x
+*/
+sounds:
+	push {lr}
+
+	cmp r0, #0
+	bne lose_sound
+
+	mov r0, #BUZZER
+	ldr r1, =#300	//Tone
+	bl softToneWrite
+	ldr r0, =#200	//Delay for .2s
+	bl delay
+	mov r0, #BUZZER
+	ldr r1, =#0
+	bl softToneWrite
+	ldr r0, =#200	//Delay for .2s
+	bl delay
+	mov r0, #BUZZER
+	ldr r1, =#800	//Tone
+	bl softToneWrite
+	ldr r0, =#200	//Delay for .2s
+	bl delay
+	mov r0, #BUZZER
+	ldr r1, =#0
+	bl softToneWrite
+	ldr r0, =#200	//Delay for .2s
+	bl delay
+	mov r0, #BUZZER
+	ldr r1, =#1000	//Tone
+	bl softToneWrite
+	ldr r0, =#1600	//Delay for 1.6s
+	bl delay
+	mov r0, #BUZZER
+	ldr r1, =#0
+	bl softToneWrite
+	bal sounds_return	//Return
+lose_sound:
+	mov r0, #BUZZER
+	ldr r1, =#1000	//Tone
+	bl softToneWrite
+	ldr r0, =#200	//Delay for .2s
+	bl delay
+	mov r0, #BUZZER
+	ldr r1, =#0
+	bl softToneWrite
+	ldr r0, =#200	//Delay for .2s
+	bl delay
+	mov r0, #BUZZER
+	ldr r1, =#800	//Tone
+	bl softToneWrite
+	ldr r0, =#200	//Delay for .2s
+	bl delay
+	mov r0, #BUZZER
+	ldr r1, =#0
+	bl softToneWrite
+	ldr r0, =#200	//Delay for .2s
+	bl delay
+	mov r0, #BUZZER
+	ldr r1, =#300	//Tone
+	bl softToneWrite
+	ldr r0, =#1600	//Delay for 1.6s
+	bl delay
+	mov r0, #BUZZER
+	ldr r1, =#0
+	bl softToneWrite
+sounds_return:
+	pop {pc}
 
 /////////////////////////////////////////////////////////////////
 /* 	compare
@@ -330,6 +429,25 @@ compare_done:
 
 	pop {r4, r5, r6, r7, pc}
 
+/////////////////////////////////////////////////////////////////
+/* 	getRand
+	purpose- Generates random number
+	parameter- Pointer to seed
+	input-     x
+	output-    x
+	return-    random integer, random integer is your new seed
+
+getRand:
+	push {lr}
+	
+	mov r3, r0	//r3=pointer to seed
+	ldr r0, [r0]
+	mul r0, r0	//Seed=Seed*Seed
+	mov r0, r0, LSL #32 //Seed=seed*4
+	
+	
+	pop {pc}
+*/
 /////////////////////////////////////////////////////////////////
 
 .data

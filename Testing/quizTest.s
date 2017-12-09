@@ -1,24 +1,18 @@
-.global main
-
-.text
-
-main:
-	push {lr}
-
-	mov r0, #65
-	mov r1, #10
-	bl mystery
-
-	pop {pc}
-
+.fpu neon		
 .data
-msg: .asciz "%d\n"
+x: .word 12,34,45,56,67,78,89,90
+y: .word 32,43,54,65,76,87,98,99
+z: .word  0,0,0,0,0,0,0,0
+.text
+.global main
+main:
+push {lr}
+mov R0, #165
+mov R1, #17
 
-.section .text
-mystery:
-	push {lr}
-	add r1, r0, lsr#3
-	mov r0, r0, lsl#2
-	pop {pc}
+add R1, R0, lsr #3
+mov R0, R0, lsl #2
+mov PC, LR
 
-	
+pop {pc}
+

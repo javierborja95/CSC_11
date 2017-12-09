@@ -3,10 +3,10 @@
 .equ INPUT, 0
 .equ OUTPUT, 1
 
-.equ GREEN_IN, 6
-.equ RED_IN, 10
-.equ YELLOW_IN, 11
-.equ BLUE_IN, 31
+.equ GREEN_IN, 26
+.equ RED_IN, 27
+.equ YELLOW_IN, 28
+.equ BLUE_IN, 29
 
 .equ GREEN_OUT, 24
 .equ RED_OUT, 22
@@ -33,36 +33,28 @@
 main:
 	push {lr}
 
-	bl wiringPiSetup	//Setting pins
-
-	mov r0, #BUZZER
-	bl softToneCreate
-
-	mov r0, #GREEN_OUT
-	mov r1, #OUTPUT
-	bl pinMode
-	mov r0, #RED_OUT
-	mov r1, #OUTPUT
-	bl pinMode
-	mov r0, #BLUE_OUT
-	mov r1, #OUTPUT
-	bl pinMode
-
 	mov r0, #GREEN_IN
-	mov r1, #INPUT
-	bl pinMode
+	push {r0}
 	mov r0, #RED_IN
-	mov r1, #INPUT
-	bl pinMode
+	push {r0}
 	mov r0, #YELLOW_IN
-	mov r1, #INPUT
-	bl pinMode
+	push {r0}
 	mov r0, #BLUE_IN
-	mov r1, #INPUT
-	bl pinMode
+	push {r0}
+	mov r0, #GREEN_OUT
+	push {r0}
+	mov r0, #RED_OUT
+	push {r0}
+	mov r0, #BLUE_OUT
+	push {r0}
+	mov r0, #BUZZER
+	push {r0}
+	add sp, #32		//Balance stack
+
+	ldr r0, =pins
+	bl setPins		//Setting pins
 
 	bl menu 		//Display menu
-
 loop:
 	ldr r0, =#LONG		//Delay for 1s
 	bl delay
@@ -108,3 +100,4 @@ msg: .asciz "game start\n"
 .section .bss
 .balign 4
 array: .skip 128 	//array[size] size=32, 32*4bytes=128 bytes
+pins: .skip 32		//pins[size]  size=8,  8*4 bytes=32 bytes
